@@ -9,8 +9,14 @@ docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
 
 Criar o primeiro usuário administrativo
-Nome de usuário-> LetDev
+
+
+Nome de usuário-> Usuario Criado
+
 Senha-> ••••••••••••••••••
+
 Confirmar a senha -> ••••••••••••••••••
-Nome completo -> LetDev
-Email -> lekeuffer@gmail.com
+
+Nome completo -> Nome Completo
+
+Email -> emailSelecionado@gmail.com
