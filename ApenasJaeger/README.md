@@ -1,3 +1,4 @@
+(os tutoriais que eu segui estão no docker-compose como comentários)
 # COMO USAR
 
 ### Ter o docker desktop já configurado na máquina!!
