@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
+    command: ["--config=/etc/otelcol/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol/otel-collector-config.yaml
+    ports:
+      - "4317:4317" #grpc receiver
+      - "4318:4318" #http receiver
+    networks:
+      - local-telemetry
+    
+# https://deepwiki.com/jaegertracing/jaeger/6.4-docker-compose-examples
+# https://citizix.com/how-to-setup-and-run-jaeger-with-docker-and-docker-compose/
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    container_name: jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"     # Jaeger UI
+      - "14268:14268"     # Collector HTTP (Jaeger Thrift)
+      - "14250:14250"     # Collector gRPC (Jaeger)
+      - "4317:4317"       # OpenTelemetry gRPC
+      - "4318:4318"       # OpenTelemetry HTTP
+      - "6831:6831/udp"   # Jaeger agent (compact thrift)
+      - "6832:6832/udp"   # Jaeger agent (binary thrift)
+      - "9411:9411"       # Zipkin compatibility
+    networks:
+      - local-telemetry
+
+
+# https://docs.techdox.nz/grafana/
+# https://blog.martinscloud.com/grafana-use-docker-compose-for-grafana/
+# https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    ports:
+      - "3000:3000"
+    networks:
+      - local-telemetry
+    # colocar restart? volume?
+
+networks:
+  local-telemetry:
+    driver: bridge
+
+
